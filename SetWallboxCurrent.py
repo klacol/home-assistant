@@ -2,7 +2,7 @@
 
 data = {
 	"solaredge_current_power" : 4000,
-	"solaredge_consumption_power" : 4720,
+	"solaredge_grid_power" : -1.42,
 	"goecharger_003339_u_l1" : 215,
 	"goecharger_003339_u_l2" : 215,
 	"goecharger_003339_u_l3" : 215,
@@ -14,9 +14,16 @@ data = {
 # sensor.solaredge_current_power
 PvPowerGenerated = data.get("solaredge_current_power")
 
-# Leistung, die das Haus momentan bezieht (inkl. E-Auto) in Watt
-# sensor.solaredge_consumption_power
-PvPowerConsumption = data.get("solaredge_consumption_power")
+# Leistung, die in das Netz eingespeist wird
+# Die Einspeisung wird als negativer Wert in kW übertragen, 
+# also solaredge_grid_power = -1,430 bedeutet: Es werden derzeit 1,430 kW ins Netz eingespeist
+# sensor.solaredge_grid_power, in kW
+PvPowerGrid = data.get("solaredge_grid_power") * 1000  # in Watt
+
+# Leistung, die in das Haus momentan bezieht (inkl. E-Auto) in Watt
+# als Differenz zwischen Erzeugung und Einspeisung
+# 
+PvPowerConsumption = PvPowerGenerated + PvPowerGrid
 
 # Aktuelle Spannung an der Wallbox (V)
 # goecharger_003339_u_l1/2/3
